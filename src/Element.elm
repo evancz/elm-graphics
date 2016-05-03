@@ -95,6 +95,9 @@ type alias Properties =
     }
 
 
+{-| Convert an element into HTML, so it can be embedded anywhere in your
+program.
+-}
 toHtml : Element -> Html msg
 toHtml =
   Native.Element.toHtml
@@ -302,12 +305,8 @@ justified =
 {-| Convert anything to its textual representation and make it displayable in
 the browser. Excellent for debugging.
 
-    main : Element
-    main =
-      show "Hello World!"
-
     show value =
-        leftAligned (Text.monospace (Text.fromString (toString value)))
+      leftAligned (Text.monospace (Text.fromString (toString value)))
 -}
 show : a -> Element
 show value =
