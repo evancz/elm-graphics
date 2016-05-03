@@ -44,11 +44,11 @@ it as a single unit.
 
 -}
 
-import Element exposing (Element)
 import Color exposing (Color, black, Gradient)
+import Element exposing (Element)
 import Native.Collage
 import Text exposing (Text)
-import Transform as T exposing (Transform)
+import Transform exposing (Transform)
 
 
 {-| A visual `Form` has a shape and texture. This can be anything from a red
@@ -216,7 +216,7 @@ Forms will be drawn in the order that they are listed, as in `collage`.
 -}
 group : List Form -> Form
 group fs =
-  form (FGroup T.identity fs)
+  form (FGroup Transform.identity fs)
 
 
 {-| Flatten many forms into a single `Form` and then apply a matrix
