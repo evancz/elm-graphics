@@ -92,8 +92,6 @@ type alias Properties =
     , color   : Maybe Color
     , href    : String
     , tag     : String
-    , hover   : ()
-    , click   : ()
     }
 
 

@@ -44,9 +44,7 @@ function newElement(width, height, elementPrim)
 				opacity: 1,
 				color: Maybe.Nothing,
 				href: '',
-				tag: '',
-				hover: Utils.Tuple0,
-				click: Utils.Tuple0
+				tag: ''
 			}
 		}
 	};
@@ -80,16 +78,6 @@ function setProps(elem, node)
 		node.id = props.tag;
 	}
 
-	if (props.hover.ctor !== '_Tuple0')
-	{
-		addHover(node, props.hover);
-	}
-
-	if (props.click.ctor !== '_Tuple0')
-	{
-		addClick(node, props.click);
-	}
-
 	if (props.href !== '')
 	{
 		var anchor = createNode('a');
@@ -101,69 +89,6 @@ function setProps(elem, node)
 	}
 
 	return node;
-}
-
-function addClick(e, handler)
-{
-	e.style.pointerEvents = 'auto';
-	e.elm_click_handler = handler;
-	function trigger(ev)
-	{
-		e.elm_click_handler(Utils.Tuple0);
-		ev.stopPropagation();
-	}
-	e.elm_click_trigger = trigger;
-	e.addEventListener('click', trigger);
-}
-
-function removeClick(e, handler)
-{
-	if (e.elm_click_trigger)
-	{
-		e.removeEventListener('click', e.elm_click_trigger);
-		e.elm_click_trigger = null;
-		e.elm_click_handler = null;
-	}
-}
-
-function addHover(e, handler)
-{
-	e.style.pointerEvents = 'auto';
-	e.elm_hover_handler = handler;
-	e.elm_hover_count = 0;
-
-	function over(evt)
-	{
-		if (e.elm_hover_count++ > 0) return;
-		e.elm_hover_handler(true);
-		evt.stopPropagation();
-	}
-	function out(evt)
-	{
-		if (e.contains(evt.toElement || evt.relatedTarget)) return;
-		e.elm_hover_count = 0;
-		e.elm_hover_handler(false);
-		evt.stopPropagation();
-	}
-	e.elm_hover_over = over;
-	e.elm_hover_out = out;
-	e.addEventListener('mouseover', over);
-	e.addEventListener('mouseout', out);
-}
-
-function removeHover(e)
-{
-	e.elm_hover_handler = null;
-	if (e.elm_hover_over)
-	{
-		e.removeEventListener('mouseover', e.elm_hover_over);
-		e.elm_hover_over = null;
-	}
-	if (e.elm_hover_out)
-	{
-		e.removeEventListener('mouseout', e.elm_hover_out);
-		e.elm_hover_out = null;
-	}
 }
 
 
@@ -590,59 +515,6 @@ function updateProps(node, curr, next)
 			// just update the link
 			node.parentNode.href = nextProps.href;
 		}
-	}
-
-	// update click and hover handlers
-	var removed = false;
-
-	// update hover handlers
-	if (currProps.hover.ctor === '_Tuple0')
-	{
-		if (nextProps.hover.ctor !== '_Tuple0')
-		{
-			addHover(node, nextProps.hover);
-		}
-	}
-	else
-	{
-		if (nextProps.hover.ctor === '_Tuple0')
-		{
-			removed = true;
-			removeHover(node);
-		}
-		else
-		{
-			node.elm_hover_handler = nextProps.hover;
-		}
-	}
-
-	// update click handlers
-	if (currProps.click.ctor === '_Tuple0')
-	{
-		if (nextProps.click.ctor !== '_Tuple0')
-		{
-			addClick(node, nextProps.click);
-		}
-	}
-	else
-	{
-		if (nextProps.click.ctor === '_Tuple0')
-		{
-			removed = true;
-			removeClick(node);
-		}
-		else
-		{
-			node.elm_click_handler = nextProps.click;
-		}
-	}
-
-	// stop capturing clicks if
-	if (removed
-		&& nextProps.hover.ctor === '_Tuple0'
-		&& nextProps.click.ctor === '_Tuple0')
-	{
-		node.style.pointerEvents = 'none';
 	}
 }
 
