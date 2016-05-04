@@ -26,6 +26,7 @@ set the typeface, set the text size, etc.
 
 import Color exposing (Color, black)
 import Regex
+import String
 
 
 {-| Represents styled text. It can be rendered with collages or with elements.
@@ -35,7 +36,6 @@ type Text
   | Append Text Text
   | Link String Text
   | Meta String String Text
-  | Styled Style Text
 
 
 {-| Styles for lines on text. This allows you to add an underline, an overline,
@@ -163,6 +163,16 @@ style sty text =
     |> maybeAdd height sty.height
 
 
+maybeAdd : (a -> Text -> Text) -> Maybe a -> Text -> Text
+maybeAdd add maybeValue text =
+  case maybeValue of
+    Nothing ->
+      text
+
+    Just value ->
+      add value text
+
+
 {-| Provide a list of preferred typefaces for some text.
 
     ["helvetica","arial","sans-serif"]
@@ -211,7 +221,7 @@ link =
 -}
 height : Float -> Text -> Text
 height px text =
-  Meta "font-size" (toString px + "px") text
+  Meta "font-size" (toString px ++ "px") text
 
 
 {-| Set the color of some text.
@@ -219,7 +229,7 @@ height px text =
     color red (fromString "Red")
 -}
 color : Color -> Text -> Text
-color =
+color color text =
   Meta "color" (colorToCss color) text
 
 
@@ -308,7 +318,7 @@ toHtmlStringHelp maybeHref styles text =
 
 replace : String -> String -> String -> String
 replace from to str =
-  Regex.replace (Regex.regex from) (\_ -> to)
+  Regex.replace Regex.All (Regex.regex from) (\_ -> to) str
 
 
 wrap : Maybe String -> String -> String -> String

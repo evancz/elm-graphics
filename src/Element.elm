@@ -1,4 +1,4 @@
-module Graphics.Element exposing
+module Element exposing
   ( Element, toHtml
   , image, fittedImage, croppedImage, tiledImage
   , leftAligned, rightAligned, centered, justified, show
@@ -382,7 +382,7 @@ flow : Direction -> List Element -> Element
 flow dir es =
   let ws = List.map widthOf es
       hs = List.map heightOf es
-      maxOrZero list = withDefault 0 (List.maximum list)
+      maxOrZero list = Maybe.withDefault 0 (List.maximum list)
       newFlow w h = newElement w h (Flow dir es)
   in
   if es == [] then empty else
@@ -437,8 +437,8 @@ layers es =
       hs = List.map heightOf es
   in
       newElement
-          (withDefault 0 (List.maximum ws))
-          (withDefault 0 (List.maximum hs))
+          (Maybe.withDefault 0 (List.maximum ws))
+          (Maybe.withDefault 0 (List.maximum hs))
           (Flow DOut es)
 
 
