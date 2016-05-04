@@ -85,8 +85,7 @@ type Element =
 
 
 type alias Properties =
-    { id      : Int
-    , width   : Int
+    { width   : Int
     , height  : Int
     , opacity : Float
     , color   : Maybe Color

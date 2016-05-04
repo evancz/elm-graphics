@@ -38,7 +38,6 @@ function newElement(width, height, elementPrim)
 		_0: {
 			element: elementPrim,
 			props: {
-				id: Utils.guid(),
 				width: width,
 				height: height,
 				opacity: 1,
@@ -363,14 +362,15 @@ function update(node, wrappedCurrent, wrappedNext)
 	var curr = wrappedCurrent._0;
 	var next = wrappedNext._0;
 	var rootNode = node;
+
+	if (curr === next)
+	{
+		return rootNode;
+	}
+
 	if (node.tagName === 'A')
 	{
 		node = node.firstChild;
-	}
-	if (curr.props.id === next.props.id)
-	{
-		updateProps(node, curr, next);
-		return rootNode;
 	}
 	if (curr.element.ctor !== next.element.ctor)
 	{
@@ -584,7 +584,6 @@ return {
 	newElement: F3(newElement),
 	addTransform: addTransform,
 	htmlHeight: F2(htmlHeight),
-	guid: Utils.guid,
 
 	block: block,
 	markdown: markdown
