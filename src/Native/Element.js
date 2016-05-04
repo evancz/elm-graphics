@@ -1,12 +1,6 @@
 var _evancz$elm_graphics$Native_Collage = function()
 {
 
-var Color = Elm.Native.Color.make(localRuntime);
-var List = Elm.Native.List.make(localRuntime);
-var Maybe = Elm.Maybe.make(localRuntime);
-var Text = Elm.Native.Text.make(localRuntime);
-var Utils = Elm.Native.Utils.make(localRuntime);
-
 
 // CREATION
 
@@ -41,7 +35,7 @@ function newElement(width, height, elementPrim)
 				width: width,
 				height: height,
 				opacity: 1,
-				color: Maybe.Nothing,
+				color: _elm_lang$core$Maybe$Nothing,
 				href: '',
 				tag: ''
 			}
@@ -69,7 +63,7 @@ function setProps(elem, node)
 
 	if (props.color.ctor === 'Just')
 	{
-		node.style.backgroundColor = Color.toCss(props.color._0);
+		node.style.backgroundColor = _evancz$elm_graphics$Text$colorToCss(props.color._0);
 	}
 
 	if (props.tag !== '')
@@ -192,7 +186,7 @@ function needsReversal(dir)
 
 function flow(dir, elist)
 {
-	var array = List.toArray(elist);
+	var array = _elm_lang$core$Native_List.toArray(elist);
 	var container = createNode('div');
 	var goDir = directionTable[dir];
 	if (goDir === goOut)
@@ -400,7 +394,7 @@ function update(node, wrappedCurrent, wrappedNext)
 					node.src = nextE._3;
 				}
 			}
-			else if (!Utils.eq(nextE, currE)
+			else if (!_elm_lang$core$Native_Utils.eq(nextE, currE)
 				|| next.props.width !== curr.props.width
 				|| next.props.height !== curr.props.height)
 			{
@@ -410,7 +404,7 @@ function update(node, wrappedCurrent, wrappedNext)
 			return rootNode;
 
 		case 'Flow':
-			var arr = List.toArray(nextE._1);
+			var arr = _elm_lang$core$Native_List.toArray(nextE._1);
 			for (var i = arr.length; i--; )
 			{
 				arr[i] = arr[i]._0.element.ctor;
@@ -419,13 +413,13 @@ function update(node, wrappedCurrent, wrappedNext)
 			{
 				return render(wrappedNext);
 			}
-			var nexts = List.toArray(nextE._1);
+			var nexts = _elm_lang$core$Native_List.toArray(nextE._1);
 			var kids = node.childNodes;
 			if (nexts.length !== kids.length)
 			{
 				return render(wrappedNext);
 			}
-			var currs = List.toArray(currE._1);
+			var currs = _elm_lang$core$Native_List.toArray(currE._1);
 			var dir = nextE._0.ctor;
 			var goDir = directionTable[dir];
 			var toReverse = needsReversal(dir);
@@ -479,7 +473,7 @@ function updateProps(node, curr, next)
 	}
 
 	var nextColor = nextProps.color.ctor === 'Just'
-		? Color.toCss(nextProps.color._0)
+		? _evancz$elm_graphics$Text$colorToCss(nextProps.color._0)
 		: '';
 	if (node.style.backgroundColor !== nextColor)
 	{
@@ -527,7 +521,7 @@ function block(align)
 	{
 		var raw = {
 			ctor: 'RawHtml',
-			html: Text.renderHtml(text),
+			html: _evancz$elm_graphics$Text$toHtmlString(text),
 			align: align
 		};
 		var pos = htmlHeight(0, raw);
@@ -535,21 +529,10 @@ function block(align)
 	};
 }
 
-function markdown(text)
-{
-	var raw = {
-		ctor: 'RawHtml',
-		html: text,
-		align: null
-	};
-	var pos = htmlHeight(0, raw);
-	return newElement(pos._0, pos._1, raw);
-}
-
 var htmlHeight =
 	typeof document !== 'undefined'
 		? realHtmlHeight
-		: function(a, b) { return Utils.Tuple2(0, 0); };
+		: function(a, b) { return _elm_lang$core$Native_Utils.Tuple2(0, 0); };
 
 function realHtmlHeight(width, rawHtml)
 {
@@ -571,7 +554,7 @@ function realHtmlHeight(width, rawHtml)
 	var w = Math.ceil(style.getPropertyValue('width').slice(0, -2) - 0);
 	var h = Math.ceil(style.getPropertyValue('height').slice(0, -2) - 0);
 	document.body.removeChild(temp);
-	return Utils.Tuple2(w, h);
+	return _elm_lang$core$Native_Utils.Tuple2(w, h);
 }
 
 
@@ -585,8 +568,7 @@ return {
 	addTransform: addTransform,
 	htmlHeight: F2(htmlHeight),
 
-	block: block,
-	markdown: markdown
+	block: block
 };
 
 }();
