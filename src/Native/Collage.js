@@ -1,13 +1,6 @@
 var _evancz$elm_graphics$Native_Collage = function()
 {
 
-// okay, we cannot short-ciruit, so now we define everything
-var Color = Elm.Native.Color.make(localRuntime);
-var List = Elm.Native.List.make(localRuntime);
-var NativeElement = Elm.Native.Graphics.Element.make(localRuntime);
-var Transform = Elm.Transform2D.make(localRuntime);
-var Utils = Elm.Native.Utils.make(localRuntime);
-
 function setStrokeStyle(ctx, style)
 {
 	ctx.lineWidth = style.width;
@@ -27,14 +20,14 @@ function setStrokeStyle(ctx, style)
 			: 'bevel';
 
 	ctx.miterLimit = style.join._0 || 10;
-	ctx.strokeStyle = Color.toCss(style.color);
+	ctx.strokeStyle = _evancz$elm_graphics$Text$colorToCss(style.color);
 }
 
 function setFillStyle(redo, ctx, style)
 {
 	var sty = style.ctor;
 	ctx.fillStyle = sty === 'Solid'
-		? Color.toCss(style._0)
+		? _evancz$elm_graphics$Text$colorToCss(style._0)
 		: sty === 'Texture'
 			? texture(redo, ctx, style._0)
 			: gradient(ctx, style._0);
@@ -42,7 +35,7 @@ function setFillStyle(redo, ctx, style)
 
 function trace(ctx, path)
 {
-	var points = List.toArray(path);
+	var points = _elm_lang$core$Native_List.toArray(path);
 	var i = points.length - 1;
 	if (i <= 0)
 	{
@@ -76,12 +69,12 @@ function line(ctx, style, path)
 
 function customLineHelp(ctx, style, path)
 {
-	var points = List.toArray(path);
+	var points = _elm_lang$core$Native_List.toArray(path);
 	if (path.closed)
 	{
 		points.push(points[0]);
 	}
-	var pattern = List.toArray(style.dashing);
+	var pattern = _elm_lang$core$Native_List.toArray(style.dashing);
 	var i = points.length - 1;
 	if (i <= 0)
 	{
@@ -145,19 +138,19 @@ function gradient(ctx, grad)
 	{
 		var p0 = grad._0, p1 = grad._1;
 		g = ctx.createLinearGradient(p0._0, -p0._1, p1._0, -p1._1);
-		stops = List.toArray(grad._2);
+		stops = _elm_lang$core$Native_List.toArray(grad._2);
 	}
 	else
 	{
 		var p0 = grad._0, p2 = grad._2;
 		g = ctx.createRadialGradient(p0._0, -p0._1, grad._1, p2._0, -p2._1, grad._3);
-		stops = List.toArray(grad._4);
+		stops = _elm_lang$core$Native_List.toArray(grad._4);
 	}
 	var len = stops.length;
 	for (var i = 0; i < len; ++i)
 	{
 		var stop = stops[i];
-		g.addColorStop(stop._0, Color.toCss(stop._1));
+		g.addColorStop(stop._0, _evancz$elm_graphics$Text$colorToCss(stop._1));
 	}
 	return g;
 }
@@ -185,7 +178,7 @@ function strokeText(redo, ctx, style, text)
 	// Degrades to non-dashed on IE 9 + 10
 	if (style.dashing.ctor !== '[]' && ctx.setLineDash)
 	{
-		var pattern = List.toArray(style.dashing);
+		var pattern = _elm_lang$core$Native_List.toArray(style.dashing);
 		ctx.setLineDash(pattern);
 	}
 	drawText(ctx, text, ctx.strokeText);
@@ -372,14 +365,18 @@ function renderForm(redo, ctx, form)
 
 function formToMatrix(form)
 {
-   var scale = form.scale;
-   var matrix = A6( Transform.matrix, scale, 0, 0, scale, form.x, form.y );
+	var scale = form.scale;
+	var matrix = A6( _evancz$elm_graphics$Transform.matrix, scale, 0, 0, scale, form.x, form.y );
 
-   var theta = form.theta;
-   if (theta !== 0)
-   {
-	   matrix = A2( Transform.multiply, matrix, Transform.rotation(theta) );
-   }
+	var theta = form.theta;
+	if (theta !== 0)
+	{
+		matrix = A2(
+			_evancz$elm_graphics$Transform.multiply,
+			matrix,
+			_evancz$elm_graphics$Transform.rotation(theta)
+		);
+	}
 
    return matrix;
 }
@@ -396,15 +393,22 @@ function str(n)
 function makeTransform(w, h, form, matrices)
 {
 	var props = form.form._0._0.props;
-	var m = A6( Transform.matrix, 1, 0, 0, -1,
-				(w - props.width ) / 2,
-				(h - props.height) / 2 );
+	var m = A6(
+		_evancz$elm_graphics$Transform.matrix,
+		1,
+		0,
+		0,
+		-1,
+		(w - props.width ) / 2,
+		(h - props.height) / 2
+	);
+
 	var len = matrices.length;
 	for (var i = 0; i < len; ++i)
 	{
-		m = A2( Transform.multiply, m, matrices[i] );
+		m = A2( _evancz$elm_graphics$Transform.multiply, m, matrices[i] );
 	}
-	m = A2( Transform.multiply, m, formToMatrix(form) );
+	m = A2( _evancz$elm_graphics$Transform.multiply, m, formToMatrix(form) );
 
 	return 'matrix(' +
 		str( m[0]) + ', ' + str( m[3]) + ', ' +
@@ -414,7 +418,7 @@ function makeTransform(w, h, form, matrices)
 
 function stepperHelp(list)
 {
-	var arr = List.toArray(list);
+	var arr = _elm_lang$core$Native_List.toArray(list);
 	var i = 0;
 	function peekNext()
 	{
@@ -466,7 +470,7 @@ function formStepper(forms)
 		if (f.ctor === 'FGroup')
 		{
 			ps.unshift(stepperHelp(f._1));
-			var m = A2(Transform.multiply, f._0, formToMatrix(out));
+			var m = A2(_evancz$elm_graphics$Transform.multiply, f._0, formToMatrix(out));
 			ctx.save();
 			ctx.transform(m[0], m[3], m[1], m[4], m[2], m[5]);
 			matrices.push(m);
@@ -495,7 +499,7 @@ function formStepper(forms)
 
 function makeCanvas(w, h)
 {
-	var canvas = NativeElement.createNode('canvas');
+	var canvas = _evancz$elm_graphics$Native_Element.createNode('canvas');
 	canvas.style.width  = w + 'px';
 	canvas.style.height = h + 'px';
 	canvas.style.display = 'block';
@@ -508,7 +512,7 @@ function makeCanvas(w, h)
 
 function render(model)
 {
-	var div = NativeElement.createNode('div');
+	var div = _evancz$elm_graphics$Native_Element.createNode('div');
 	div.style.overflow = 'hidden';
 	div.style.position = 'relative';
 	update(div, model, model);
@@ -562,12 +566,12 @@ function nodeStepper(w, h, div)
 		var elem = form.form._0;
 
 		var node = (!kid || kid.getContext)
-			? NativeElement.render(elem)
-			: NativeElement.update(kid, kid.oldElement, elem);
+			? _evancz$elm_graphics$Native_Element.render(elem)
+			: _evancz$elm_graphics$Native_Element.update(kid, kid.oldElement, elem);
 
 		node.style.position = 'absolute';
 		node.style.opacity = alpha * form.alpha * elem._0.props.opacity;
-		NativeElement.addTransform(node.style, makeTransform(w, h, form, matrices));
+		_evancz$elm_graphics$Native_Element.addTransform(node.style, makeTransform(w, h, form, matrices));
 		node.oldElement = elem;
 		++i;
 		if (!kid)
@@ -633,7 +637,7 @@ function update(div, _, model)
 
 function collage(w, h, forms)
 {
-	return A3(NativeElement.newElement, w, h, {
+	return A3(_evancz$elm_graphics$Native_Element.newElement, w, h, {
 		ctor: 'Custom',
 		type: 'Collage',
 		render: render,
