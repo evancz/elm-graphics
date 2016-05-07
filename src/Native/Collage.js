@@ -366,15 +366,15 @@ function renderForm(redo, ctx, form)
 function formToMatrix(form)
 {
 	var scale = form.scale;
-	var matrix = A6( _evancz$elm_graphics$Transform.matrix, scale, 0, 0, scale, form.x, form.y );
+	var matrix = A6( _evancz$elm_graphics$Transform$matrix, scale, 0, 0, scale, form.x, form.y );
 
 	var theta = form.theta;
 	if (theta !== 0)
 	{
 		matrix = A2(
-			_evancz$elm_graphics$Transform.multiply,
+			_evancz$elm_graphics$Transform$multiply,
 			matrix,
-			_evancz$elm_graphics$Transform.rotation(theta)
+			_evancz$elm_graphics$Transform$rotation(theta)
 		);
 	}
 
@@ -394,7 +394,7 @@ function makeTransform(w, h, form, matrices)
 {
 	var props = form.form._0._0.props;
 	var m = A6(
-		_evancz$elm_graphics$Transform.matrix,
+		_evancz$elm_graphics$Transform$matrix,
 		1,
 		0,
 		0,
@@ -406,9 +406,9 @@ function makeTransform(w, h, form, matrices)
 	var len = matrices.length;
 	for (var i = 0; i < len; ++i)
 	{
-		m = A2( _evancz$elm_graphics$Transform.multiply, m, matrices[i] );
+		m = A2( _evancz$elm_graphics$Transform$multiply, m, matrices[i] );
 	}
-	m = A2( _evancz$elm_graphics$Transform.multiply, m, formToMatrix(form) );
+	m = A2( _evancz$elm_graphics$Transform$multiply, m, formToMatrix(form) );
 
 	return 'matrix(' +
 		str( m[0]) + ', ' + str( m[3]) + ', ' +
@@ -470,7 +470,7 @@ function formStepper(forms)
 		if (f.ctor === 'FGroup')
 		{
 			ps.unshift(stepperHelp(f._1));
-			var m = A2(_evancz$elm_graphics$Transform.multiply, f._0, formToMatrix(out));
+			var m = A2(_evancz$elm_graphics$Transform$multiply, f._0, formToMatrix(out));
 			ctx.save();
 			ctx.transform(m[0], m[3], m[1], m[4], m[2], m[5]);
 			matrices.push(m);
