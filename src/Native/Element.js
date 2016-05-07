@@ -1,4 +1,4 @@
-var _evancz$elm_graphics$Native_Collage = function()
+var _evancz$elm_graphics$Native_Element = function()
 {
 
 
@@ -305,6 +305,44 @@ function rawHtml(elem)
 }
 
 
+// TO HTML
+
+function toHtml(element)
+{
+	return _elm_lang$virtual_dom$Native_VirtualDom.custom(
+		_elm_lang$core$Native_List.Nil,
+		element,
+		implementation
+	);
+}
+
+
+// WIDGET IMPLEMENTATION
+
+var implementation = {
+	render: render,
+	diff: diff
+};
+
+function diff(a, b)
+{
+	if (a === b)
+	{
+		return null;
+	}
+
+	return {
+		applyPatch: applyPatch,
+		data: { a: a, b: b }
+	};
+}
+
+function applyPatch(domNode, data)
+{
+	return updateAndReplace(domNode, data.a, data.b);
+}
+
+
 // RENDER
 
 function render(wrappedElement)
@@ -559,14 +597,13 @@ function realHtmlHeight(width, rawHtml)
 
 
 return {
+	toHtml: toHtml,
+
 	render: render,
 	update: update,
-	updateAndReplace: updateAndReplace,
-
 	createNode: createNode,
 	newElement: F3(newElement),
 	addTransform: addTransform,
-	htmlHeight: F2(htmlHeight),
 
 	block: block
 };
