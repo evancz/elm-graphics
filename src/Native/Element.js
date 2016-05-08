@@ -326,14 +326,17 @@ var implementation = {
 
 function diff(a, b)
 {
-	if (a === b)
+	var aModel = a.model;
+	var bModel = b.model;
+
+	if (aModel === bModel)
 	{
 		return null;
 	}
 
 	return {
 		applyPatch: applyPatch,
-		data: { a: a, b: b }
+		data: { a: aModel, b: bModel }
 	};
 }
 
