@@ -186,7 +186,7 @@ function strokeText(redo, ctx, style, text)
 
 function drawText(ctx, text, canvasDrawFn)
 {
-	var textChunks = chunkText(defaultContext, text);
+	var textChunks = chunkText(copy(defaultFacts), text);
 
 	var totalWidth = 0;
 	var maxHeight = 0;
@@ -218,58 +218,57 @@ function drawText(ctx, text, canvasDrawFn)
 	}
 }
 
-function toFont(props)
+function toFont(facts)
 {
-	return [
-		props['font-style'],
-		props['font-variant'],
-		props['font-weight'],
-		props['font-size'],
-		props['font-family']
-	].join(' ');
+	return facts['font-style']
+		+ ' ' + facts['font-variant']
+		+ ' ' + facts['font-weight']
+		+ ' ' + facts['font-size']
+		+ ' ' + facts['font-family'];
 }
 
 
 // Convert the object returned by the text module
 // into something we can use for styling canvas text
-function chunkText(context, text)
+function chunkText(facts, text)
 {
-	var tag = text.ctor;
-	if (tag === 'Text:Append')
+	switch (text.ctor)
 	{
-		var leftChunks = chunkText(context, text._0);
-		var rightChunks = chunkText(context, text._1);
-		return leftChunks.concat(rightChunks);
-	}
-	if (tag === 'Text:Text')
-	{
-		return [{
-			text: text._0,
-			color: context.color,
-			height: context['font-size'].slice(0, -2) | 0,
-			font: toFont(context)
-		}];
-	}
-	if (tag === 'Text:Meta')
-	{
-		var newContext = freshContext(text._0, context);
-		return chunkText(newContext, text._1);
+		case 'Append':
+			var leftChunks = chunkText(copy(facts), text._0);
+			var rightChunks = chunkText(copy(facts), text._1);
+			return leftChunks.concat(rightChunks);
+
+		case 'Str':
+			return [{
+				text: text._0,
+				color: facts['color'],
+				height: facts['font-size'].slice(0, -2) | 0,
+				font: toFont(facts)
+			}];
+
+		case 'Link':
+			return chunkText(facts, text._1);
+
+		case 'Meta':
+			facts[text._0] = text._1;
+			return chunkText(facts, text._2);
 	}
 }
 
-function freshContext(props, ctx)
+function copy(facts)
 {
 	return {
-		'font-style': props['font-style'] || ctx['font-style'],
-		'font-variant': props['font-variant'] || ctx['font-variant'],
-		'font-weight': props['font-weight'] || ctx['font-weight'],
-		'font-size': props['font-size'] || ctx['font-size'],
-		'font-family': props['font-family'] || ctx['font-family'],
-		'color': props['color'] || ctx['color']
+		'font-style': facts['font-style'],
+		'font-variant': facts['font-variant'],
+		'font-weight': facts['font-weight'],
+		'font-size': facts['font-size'],
+		'font-family': facts['font-family'],
+		'color': facts['color']
 	};
 }
 
-var defaultContext = {
+var defaultFacts = {
 	'font-style': 'normal',
 	'font-variant': 'normal',
 	'font-weight': 'normal',
