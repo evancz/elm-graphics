@@ -231,7 +231,10 @@ type ElementPrim
 type ImageStyle = Plain | Fitted | Cropped (Int,Int) | Tiled
 
 
-{-| Create an image given a width, height, and image source. -}
+{-| Create an image given a width, height, and image source.
+
+    image 100 100 "yogi.jpg"
+-}
 image : Int -> Int -> String -> Element
 image w h src =
     newElement w h (Image Plain w h src)
@@ -239,6 +242,8 @@ image w h src =
 
 {-| Create a fitted image given a width, height, and image source.
 This will crop the picture to best fill the given dimensions.
+
+    fittedImage (20,20) 100 100 "yogi.jpg"
 -}
 fittedImage : Int -> Int -> String -> Element
 fittedImage w h src =
