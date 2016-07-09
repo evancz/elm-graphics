@@ -243,7 +243,7 @@ image w h src =
 {-| Create a fitted image given a width, height, and image source.
 This will crop the picture to best fill the given dimensions.
 
-    fittedImage (20,20) 100 100 "yogi.jpg"
+    fittedImage 100 100 "yogi.jpg"
 -}
 fittedImage : Int -> Int -> String -> Element
 fittedImage w h src =
