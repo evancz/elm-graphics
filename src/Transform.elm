@@ -8,7 +8,7 @@ module Transform exposing
 
 {-| A library for performing [2D matrix transformations][affine].  It
 is used primarily with the `groupTransform` function from
-[`Graphics.Collage`](Graphics-Collage) and allows you to do things
+[`Collage`](Collage) and allows you to do things
 like rotation, scaling, translation, shearing, and reflection.
 
 Note that all the matrices in this library are 3x3 matrices of homogeneous

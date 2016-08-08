@@ -175,7 +175,7 @@ textured src shape =
   fill (Texture src) shape
 
 
-{-| Fill a shape with a [gradient](Color#linear). -}
+{-| Fill a shape with a [gradient](http://package.elm-lang.org/packages/elm-lang/core/latest/Color#linear). -}
 gradient : Gradient -> Shape -> Form
 gradient grad shape =
   fill (Grad grad) shape
