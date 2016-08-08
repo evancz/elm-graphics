@@ -7,7 +7,7 @@ module Text exposing
   -- where
 
 {-| A library for styling and displaying text. While the
-[`String`](String) library focuses on representing and manipulating
+[`String`](http://package.elm-lang.org/packages/elm-lang/core/latest/String) library focuses on representing and manipulating
 strings of character strings, the `Text` library focuses on how those
 strings should look on screen. It lets you make text bold or italic,
 set the typeface, set the text size, etc.
