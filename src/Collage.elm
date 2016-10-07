@@ -342,9 +342,12 @@ oval w h =
       t = 2 * pi / n
       hw = w/2
       hh = h/2
-      f i = (hw * cos (t*i), hh * sin (t*i))
+      f i =
+        ( hw * cos (t * toFloat i)
+        , hh * sin (t * toFloat i)
+        )
   in
-      Shape <| List.map f [0..n-1]
+      Shape <| List.map f (List.range 0 (n-1))
 
 
 {-| A circle with a given radius. -}
@@ -363,9 +366,12 @@ ngon : Int -> Float -> Shape
 ngon n r =
   let m = toFloat n
       t = 2 * pi / m
-      f i = ( r * cos (t*i), r * sin (t*i) )
+      f i =
+        ( r * cos (t * toFloat i)
+        , r * sin (t * toFloat i)
+        )
   in
-      Shape <| List.map f [0..m-1]
+      Shape <| List.map f (List.range 0 (n-1))
 
 {-| Create some text. Details like size and color are part of the `Text` value
 itself, so you can mix colors and sizes and fonts easily.
