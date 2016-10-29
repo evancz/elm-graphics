@@ -67,6 +67,7 @@ import Color exposing (..)
 import Html exposing (Html)
 import Native.Element
 import Text exposing (Text)
+import Tuple exposing (second)
 
 
 
@@ -143,7 +144,7 @@ width newWidth (Element_elm_builtin {element, props}) =
             round (toFloat h / toFloat w * toFloat newWidth)
 
         RawHtml ->
-            snd (Native.Element.htmlHeight newWidth element)
+            second (Native.Element.htmlHeight newWidth element)
 
         _ ->
             props.height
