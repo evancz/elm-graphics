@@ -26,7 +26,6 @@ set the typeface, set the text size, etc.
 
 import Color exposing (Color, black)
 import Regex
-import String
 
 
 {-| Represents styled text. It can be rendered with collages or with elements.
