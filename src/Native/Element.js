@@ -571,7 +571,7 @@ function block(align)
 }
 
 var htmlHeight =
-	typeof document !== 'undefined'
+	(typeof document !== 'undefined' && document.body)
 		? realHtmlHeight
 		: function(a, b) { return _elm_lang$core$Native_Utils.Tuple2(0, 0); };
 
