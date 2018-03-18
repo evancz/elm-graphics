@@ -607,6 +607,7 @@ return {
 	createNode: createNode,
 	newElement: F3(newElement),
 	addTransform: addTransform,
+	htmlHeight: F2(htmlHeight),
 
 	block: block
 };
